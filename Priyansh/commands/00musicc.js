@@ -26,12 +26,12 @@ function getVideoID(url) {
 }
 
 module.exports.config = {
-    name: "yt",
+    name: "music",
     version: "1.1.0",
     credits: "Raj",
     hasPermssion: 0,
     cooldowns: 5,
-    description: "YouTube video ko URL ya name se MP3 me download karein",
+    description: "YouTube video ko URL ya name se download karein",
     commandCategory: "media",
     usages: "[YouTube URL ya song ka naam]"
 };
@@ -57,7 +57,6 @@ module.exports.run = async function({ api, args, event }) {
             videoID = selected.videoId;
         }
 
-        // Change format to mp3
         const { data: { title, quality, downloadLink } } = await axios.get(`${global.apis.diptoApi}/ytDl3?link=${videoID}&format=mp3`);
 
         if (searchMsg?.messageID) api.unsendMessage(searchMsg.messageID);
@@ -65,7 +64,7 @@ module.exports.run = async function({ api, args, event }) {
         const shortLink = (await axios.get(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(downloadLink)}`)).data;
 
         return api.sendMessage({
-            body: `🎵 Title: ${title}\n📥 Download: ${shortLink}`,
+            body: `🎬 Title: ${title}\n📺 Quality: ${quality}\n📥 Download: ${shortLink}`,
             attachment: await getStreamFromURL(downloadLink, `${title}.mp3`)
         }, event.threadID, event.messageID);
 
